@@ -1,0 +1,42 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  product_id          String   @id @default(uuid())
+  product_title       String
+  product_description String
+  product_category    String
+  price               String
+  discount_percentage String
+  rating              String
+  stock               String
+  tags                String[]
+  brand               String
+  sku                 String
+  weight              String
+  dimensions          Json
+  thumbnail           String
+
+  review Review[]
+}
+
+model Review {
+  review_id      String   @id @default(uuid())
+  rating         String
+  comment        String
+  reviewer_name  String
+  reviewer_email String
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  product_id String
+
+  product Product @relation(fields: [product_id], references: [product_id])
+}
